@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miaocraft</title>
+    <style>
+        @font-face {
+            font-family: 'm1a-Cat_font';
+            src: url(font/CAT_FONT.ttf);
+        }
+        @font-face {
+            font-family: 'm1a-Minecraft';
+            src: url(font/1_Minecraft-Regular.otf);
+        }
+        @font-face {
+            font-family: 'm1a-MinecraftB';
+            src: url(font/B_Minecrafter.Reg.ttf);
+        }
+        @font-face {
+            font-family: 'm1a-Mojang';
+            src: url(font/Mojang-ABC.ttf);
+        }
+    </style>
+    <style>
+        /* 手机竖屏 */
+        @media (min-width: 0px) and (max-width:512px){
+            body{
+                background-size: cover;
+                background-position: 70%;
+            }
+            #maintext{
+                font-size: 44px;
+                height: 64px;
+                line-height: 64px;
+            }
+            #maintext::after{
+                height: 44px;
+            }
+            #navblank{
+                visibility: hidden;
+            }
+        }
+        /* 手机横屏 */
+        @media (min-width: 512px) and (max-width:1080px){
+            body{
+                background-size: 100%;
+            }
+            #maintext{
+                font-size: 64px;
+                height: 84px;
+                line-height: 84px;
+            }
+            #maintext::after{
+                height: 64px;
+            }
+            #navblank{
+                visibility: hidden;
+            }
+        }
+        /* 电脑 */
+        @media (min-width: 1080px){
+            body{
+                background-size: 100%;
+            }
+            #maintext{
+                font-size: 108px;
+                height: 128px;
+                line-height: 128px;
+            }
+            #maintext::after{
+                height: 108px;
+            }
+            #navblank{
+                flex: 0 0 128px;
+                width: 128px;
+            }
+        }
+    </style>
+    <style>
+        /* 通用 */
+        html{
+            height: 98%;
+        }
+        body{
+            height: 100%;
+            
+            background-attachment: fixed;
+            background-color: #272727;
+            background-image: url(miaocraft_bg.png);
+        }
+        #container{
+            height: 100%;
+            display: flex;
+        }
+        #mainpage{
+            flex: 1 1 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius:32px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        #maintext{
+            color: #fff;
+            display: inline-block;
+            position: relative;
+            user-select: none;
+        }
+        #maintext::after{
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 10px;
+            width: 5px;
+            background-color: #fff;
+            animation: blink 1s steps(1) infinite;
+        }
+        @keyframes blink{
+            0%,100%{
+                background-color: #fff;
+            }
+            50%{
+                background-color: transparent;
+            }
+        }
+    </style>
+    <style>
+        /* 导航样式 */
+        .bookmark{
+            width: 144px;
+            height: 128px;
+            margin-left: 16px;
+            position: fixed;
+            display: flex;
+            align-items: center;
+            border-top-left-radius: 16px;
+            border-bottom-left-radius: 16px;
+            background-color: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .booktitle{
+            margin-left: 40px;
+            color: #fff;
+            user-select: none;
+        }
+        .bookpage{
+            width: 700px;
+            min-height: 128px;
+            margin: 16px;
+            margin-left: 100%;
+            position: fixed;
+            display: flex;
+            align-items: center;
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+            background-color: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .page{
+            color: #fff;
+            margin-left: 32px;
+            margin-right: 32px;
+        }
+    </style>
+    <style>
+        /* 导航动画 */
+        .bookmark{
+            transition-duration: 0.5s;
+        }
+        .bookmark:hover{
+            transform: translateX(-16%);
+        }
+        p{
+            transition-duration: 0.5s;
+        }
+        p:hover{
+            color: #ec9bad;
+        }
+    </style>
+    <style>
+        /* 导航2 */
+        #playpage{
+            font-size: 32px;
+        }
+        #status{
+            margin-top: 144px;
+        }
+        #description{
+            margin-top: 288px;
+        }
+        .bookpage:has(>#descriptionpage){
+            border-bottom-left-radius: 16px;
+            top: -16px;
+            background-color: rgba(0, 0, 0, 0.75);
+        }
+        #notice{
+            margin-top: 432px;
+        }
+        .bookpage:has(>#noticepage){
+            border-bottom-left-radius: 16px;
+            top: -16px;
+            background-color: rgba(0, 0, 0, 0.75);
+        }
+        #about{
+            margin-top: 576px;
+        }
+    </style>
+    <script>
+        // 初始化打字效果
+        var texts = [
+            {
+                "text": "Miaocraft",
+                "fontFamily": "m1a-Cat_font"
+            },
+            {
+                "text": "Minecraft",
+                "fontFamily": "m1a-Minecraft"
+            },
+            {
+                "text": "Minecraft",
+                "fontFamily": "m1a-MinecraftB"
+            },
+            {
+                "text": "Mojang",
+                "fontFamily": "m1a-Mojang"
+            }
+        ]
+        function initType(){
+            var maintext = document.getElementById("maintext");
+            var type2del = true;
+            var index = 0;
+            var jndex = 0;
+            maintext.style.fontFamily = texts[index].fontFamily;
+            setInterval(
+                function(){
+                    if(type2del){
+                        maintext.innerHTML = texts[index].text.slice(0, ++jndex);
+                    }else{
+                        maintext.innerHTML = texts[index].text.slice(0, (jndex>0 ? jndex-- : 0));
+                    }
+                    if(jndex == texts[index].text.length+3){
+                        type2del = false;
+                    }else if(jndex<-8){
+                        jndex = 0;
+                        type2del = true;
+                        index++;
+                        if(index==texts.length){
+                            index = 0;
+                        }
+                        maintext.style.fontFamily = texts[index].fontFamily;
+                    }else if(jndex<1){
+                        jndex--;
+                    }
+                },200);
+        }
+    </script>
+    <script>
+        // 书签点击事件
+        var movewidth = "512";
+        var nowBookmark = "none";
+        function clickBookmark(bmID){
+            if(nowBookmark=="none"){
+                nowBookmark = bmID;
+                var element = document.getElementById(bmID);
+                element.style.transform = "translateX(-"+movewidth+"%)";
+                element.style.zIndex = "10";
+            }else if(nowBookmark==bmID){
+                nowBookmark = "none";
+                var element = document.getElementById(bmID);
+                element.style.transform = "";
+                element.style.zIndex = "";
+            }else{
+                var element = document.getElementById(nowBookmark);
+                element.style.transform = "";
+                element.style.zIndex = "";
+                nowBookmark = bmID;
+                var element = document.getElementById(bmID);
+                element.style.transform = "translateX(-"+movewidth+"%)";
+                element.style.zIndex = "10";
+            }
+        }
+        </script>
+        <script>
+            window.onload = function(){
+                initType();
+            }
+        </script>
+</head>
+<body>
+    <div id="container">
+        <div id="mainpage">
+            <span id="maintext"></span>
+        </div>
+        <div id="navblank">
+            <div id="play" class="bookmark" onclick="clickBookmark('play')">
+                <h2 class="booktitle">加入<br>游戏</h1>
+                <div class="bookpage">
+                    <p id="playpage" class="page">
+                        mc.miaocraft.party
+                    </p>
+                </div>
+            </div>
+            <div id="status" class="bookmark" onclick="clickBookmark('status')">
+                <h2 class="booktitle">服务器<br>状态</h1>
+                <div class="bookpage">
+                    <p id="statuspage" class="page">
+                        [MinecraftBE] 暂停运行<br>
+                        [MinecraftJava] 1.19.2-Forge_43.3.13
+                    </p>
+                </div>
+            </div>
+            <div id="description" class="bookmark" onclick="clickBookmark('description')">
+                <h2 class="booktitle">服务器<br>须知</h1>
+                <div class="bookpage">
+                    <p id="descriptionpage" class="page">
+(2024.5.26)<br>
+[MinecraftBE]暂停运行, 敬请期待!<br>
+[MinecraftJava1.19.2-mod]<br>
+各位星塘风语服务器成员:<br>
+中午好, 酥喵MinecraftJava服务器已开启, 需要的可通过以上所示的ip和端口进入, 服务器为群员无偿提供, 请不要通过ip攻击服务器.<br>
+*1.需要向管理员提供玩家ID等必要信息, 否则无法进入服务器.<br>
+*2.服务器无法连接时可向 @随风风 进行报备<br>
+(管理员大多因学业或工作繁忙, 所以直接留言相应内容即可, 回复时间为周末/节假日的下午6点至晚上12点).<br>
+*3.擅自访问外网可能产生诸多高度敏感问题. 因此根据相关规定要求, 我们不会提供访问外网的便利和帮助.<br>
+*4.服务器最终解释权归酥喵所有.<br>
+                    </p>
+                </div>
+            </div>
+            <div id="notice" class="bookmark" onclick="clickBookmark('notice')">
+                <h2 class="booktitle">公告</h1>
+                <div class="bookpage">
+                    <p id="noticepage" class="page">
+(2024.5.26)<br>
+各位星塘风语服务器成员:<br>
+欢迎进入星塘风语服务器, 为了维护服务器的和谐与稳定, 还请大家遵守以下几点.<br>
+游戏/服务器中禁止:<br>
+1. 使用外挂或窃取玩家物品,恶意破坏服务器存档等行为.<br>
+2. 建造高频红石电路或设施, (因为这可能会造成服务器卡顿并影响其他玩家体验.)<br>
+3. 发送任何有关涉政,暴恐,血腥,色情,争议性等信息.<br>
+4. 无故刷屏, 发送意义不明消息, 影响正常的话题交流.<br>
+5. 造谣,侮辱,诽谤,煽动对立和仇恨.<br>
+*1. 如有修改将会在公告发布, 继续在服务器中游玩即表明你同意并遵守以上所有规定.<br>
+*2. 特别提醒: 一旦您退出群聊, 无论主动还是被动, 服务器白名单权限也将同时移除.<br>
+*3. 最终解释权归酥喵所有.<br>
+Harehane
+                    </p>
+                </div>
+            </div>
+            <div id="about" class="bookmark" onclick="clickBookmark('about')">
+                <h2 class="booktitle">关于</h1>
+                <div class="bookpage">
+                    <p id="aboutpage" class="page">
+                        <a style="font-size: 32px;">愿时间给你, 你想要的答案~<br></a>
+                        <a style="font-size: 16px;">M1a0w0</a>
+                    </p>
+                </div>
+            </div>
+            <!-- <div id="example" class="bookmark" onclick="clickBookmark('example')">
+                <h2 class="booktitle">example</h1>
+                <div class="examplepage">
+                    <p id="statuspage" class="page">
+                    </p>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</body>
+</html>
