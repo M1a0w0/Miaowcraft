@@ -1,373 +1,557 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miaocraft</title>
-    <style>
-        @font-face {
-            font-family: 'm1a-Cat_font';
-            src: url(font/CAT_FONT.ttf);
-        }
-        @font-face {
-            font-family: 'm1a-Minecraft';
-            src: url(font/1_Minecraft-Regular.otf);
-        }
-        @font-face {
-            font-family: 'm1a-MinecraftB';
-            src: url(font/B_Minecrafter.Reg.ttf);
-        }
-        @font-face {
-            font-family: 'm1a-Mojang';
-            src: url(font/Mojang-ABC.ttf);
-        }
-    </style>
-    <style>
-        /* 手机竖屏 */
-        @media (min-width: 0px) and (max-width:512px){
-            body{
-                background-size: cover;
-                background-position: 70%;
-            }
-            #maintext{
-                font-size: 44px;
-                height: 64px;
-                line-height: 64px;
-            }
-            #maintext::after{
-                height: 44px;
-            }
-            #navblank{
-                visibility: hidden;
-            }
-        }
-        /* 手机横屏 */
-        @media (min-width: 512px) and (max-width:1080px){
-            body{
-                background-size: 100%;
-            }
-            #maintext{
-                font-size: 64px;
-                height: 84px;
-                line-height: 84px;
-            }
-            #maintext::after{
-                height: 64px;
-            }
-            #navblank{
-                visibility: hidden;
-            }
-        }
-        /* 电脑 */
-        @media (min-width: 1080px){
-            body{
-                background-size: 100%;
-            }
-            #maintext{
-                font-size: 108px;
-                height: 128px;
-                line-height: 128px;
-            }
-            #maintext::after{
-                height: 108px;
-            }
-            #navblank{
-                flex: 0 0 128px;
-                width: 128px;
-            }
-        }
-    </style>
-    <style>
-        /* 通用 */
-        html{
-            height: 98%;
-        }
-        body{
-            height: 100%;
-            
-            background-attachment: fixed;
-            background-color: #272727;
-            background-image: url(miaocraft_bg.png);
-        }
-        #container{
-            height: 100%;
-            display: flex;
-        }
-        #mainpage{
-            flex: 1 1 1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius:32px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-        #maintext{
-            color: #fff;
-            display: inline-block;
-            position: relative;
-            user-select: none;
-        }
-        #maintext::after{
-            content: '';
-            position: absolute;
-            right: -10px;
-            top: 10px;
-            width: 5px;
-            background-color: #fff;
-            animation: blink 1s steps(1) infinite;
-        }
-        @keyframes blink{
-            0%,100%{
-                background-color: #fff;
-            }
-            50%{
-                background-color: transparent;
-            }
-        }
-    </style>
-    <style>
-        /* 导航样式 */
-        .bookmark{
-            width: 144px;
-            height: 128px;
-            margin-left: 16px;
-            position: fixed;
-            display: flex;
-            align-items: center;
-            border-top-left-radius: 16px;
-            border-bottom-left-radius: 16px;
-            background-color: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        .booktitle{
-            margin-left: 40px;
-            color: #fff;
-            user-select: none;
-        }
-        .bookpage{
-            width: 700px;
-            min-height: 128px;
-            margin: 16px;
-            margin-left: 100%;
-            position: fixed;
-            display: flex;
-            align-items: center;
-            border-top-right-radius: 16px;
-            border-bottom-right-radius: 16px;
-            background-color: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        .page{
-            color: #fff;
-            margin-left: 32px;
-            margin-right: 32px;
-        }
-    </style>
-    <style>
-        /* 导航动画 */
-        .bookmark{
-            transition-duration: 0.5s;
-        }
-        .bookmark:hover{
-            transform: translateX(-16%);
-        }
-        p{
-            transition-duration: 0.5s;
-        }
-        p:hover{
-            color: #ec9bad;
-        }
-    </style>
-    <style>
-        /* 导航2 */
-        #playpage{
-            font-size: 32px;
-        }
-        #status{
-            margin-top: 144px;
-        }
-        #description{
-            margin-top: 288px;
-        }
-        .bookpage:has(>#descriptionpage){
-            border-bottom-left-radius: 16px;
-            top: -16px;
-            background-color: rgba(0, 0, 0, 0.75);
-        }
-        #notice{
-            margin-top: 432px;
-        }
-        .bookpage:has(>#noticepage){
-            border-bottom-left-radius: 16px;
-            top: -16px;
-            background-color: rgba(0, 0, 0, 0.75);
-        }
-        #about{
-            margin-top: 576px;
-        }
-    </style>
-    <script>
-        // 初始化打字效果
-        var texts = [
-            {
-                "text": "Miaocraft",
-                "fontFamily": "m1a-Cat_font"
-            },
-            {
-                "text": "Minecraft",
-                "fontFamily": "m1a-Minecraft"
-            },
-            {
-                "text": "Minecraft",
-                "fontFamily": "m1a-MinecraftB"
-            },
-            {
-                "text": "Mojang",
-                "fontFamily": "m1a-Mojang"
-            }
-        ]
-        function initType(){
-            var maintext = document.getElementById("maintext");
-            var type2del = true;
-            var index = 0;
-            var jndex = 0;
-            maintext.style.fontFamily = texts[index].fontFamily;
-            setInterval(
-                function(){
-                    if(type2del){
-                        maintext.innerHTML = texts[index].text.slice(0, ++jndex);
-                    }else{
-                        maintext.innerHTML = texts[index].text.slice(0, (jndex>0 ? jndex-- : 0));
-                    }
-                    if(jndex == texts[index].text.length+3){
-                        type2del = false;
-                    }else if(jndex<-8){
-                        jndex = 0;
-                        type2del = true;
-                        index++;
-                        if(index==texts.length){
-                            index = 0;
-                        }
-                        maintext.style.fontFamily = texts[index].fontFamily;
-                    }else if(jndex<1){
-                        jndex--;
-                    }
-                },200);
-        }
-    </script>
-    <script>
-        // 书签点击事件
-        var movewidth = "512";
-        var nowBookmark = "none";
-        function clickBookmark(bmID){
-            if(nowBookmark=="none"){
-                nowBookmark = bmID;
-                var element = document.getElementById(bmID);
-                element.style.transform = "translateX(-"+movewidth+"%)";
-                element.style.zIndex = "10";
-            }else if(nowBookmark==bmID){
-                nowBookmark = "none";
-                var element = document.getElementById(bmID);
-                element.style.transform = "";
-                element.style.zIndex = "";
-            }else{
-                var element = document.getElementById(nowBookmark);
-                element.style.transform = "";
-                element.style.zIndex = "";
-                nowBookmark = bmID;
-                var element = document.getElementById(bmID);
-                element.style.transform = "translateX(-"+movewidth+"%)";
-                element.style.zIndex = "10";
-            }
-        }
-        </script>
-        <script>
-            window.onload = function(){
-                initType();
-            }
-        </script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<link rel="preload" href="fonts/CAT_FONT.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+	<link rel="preload" href="fonts/1_Minecraft-Regular.otf" as="font" type="font/otf" crossorigin="anonymous">
+	<link rel="preload" href="fonts/B_Minecrafter.Reg.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+	<title>Miaocraft</title>
+	<style>
+		/* 字体 */
+		@font-face {
+			src: url(fonts/CAT_FONT.ttf);
+			font-family: 'm1a-Cat_font';
+		}
+
+		@font-face {
+			src: url(fonts/1_Minecraft-Regular.otf);
+			font-family: 'm1a-Minecraft';
+		}
+
+		@font-face {
+			src: url(fonts/B_Minecrafter.Reg.ttf);
+			font-family: 'm1a-MinecraftB';
+		}
+	</style>
+	<style>
+		/* 宽度: 0-512px */
+		@media (min-width: 0px) and (max-width:512px) {
+			#maintext {
+				height: 64px;
+				font-size: 44px;
+				line-height: 64px;
+			}
+
+			#maintext::after {
+				height: 44px;
+			}
+
+			#bmblank {
+				display: none;
+			}
+
+			#container {
+				flex-direction: column;
+			}
+
+			#bottomdiv {
+				display: flex;
+			}
+
+			#bottomdiv a {
+				font-size: 20px;
+			}
+		}
+
+		/* 宽度: 512-1080px */
+		@media (min-width: 512px) and (max-width:1080px) {
+			#maintext {
+				height: 84px;
+				font-size: 64px;
+				line-height: 84px;
+			}
+
+			#maintext::after {
+				height: 64px;
+			}
+
+			#bmblank {
+				display: none;
+			}
+
+			#container {
+				flex-direction: column;
+			}
+
+			#bottomdiv {
+				display: flex;
+			}
+
+			#bottomdiv a {
+				font-size: 28px;
+			}
+		}
+
+		/* 宽度: 1080-px */
+		@media (min-width: 1080px) {
+			#maintext {
+				height: 128px;
+				font-size: 108px;
+				line-height: 128px;
+			}
+
+			#maintext::after {
+				height: 108px;
+			}
+
+			#bmblank {
+				flex: 0 0 128px;
+			}
+
+			#bottomdiv {
+				display: none;
+			}
+		}
+	</style>
+	<style>
+		/* 页面 */
+		html {
+			height: 98%;
+		}
+
+		body {
+			background-color: #ffffff;
+			height: 100%;
+			height: calc(100% - env(safe-area-inset-bottom));
+			overflow: hidden;
+		}
+
+		a {
+			text-decoration: none;
+		}
+
+		#container {
+			display: flex;
+			padding-top: env(safe-area-inset-top);
+			padding-right: env(safe-area-inset-right);
+			padding-bottom: env(safe-area-inset-bottom);
+			padding-left: env(safe-area-inset-left);
+			height: 100%;
+		}
+
+		#mainpage {
+			display: flex;
+			flex: 1 1 1px;
+			justify-content: center;
+			align-items: center;
+			border-radius: 32px;
+			background-color: rgba(0, 0, 0, 0.25);
+			-webkit-backdrop-filter: blur(10px);
+			backdrop-filter: blur(10px);
+		}
+
+		#maintext {
+			position: relative;
+			color: #fff;
+			-webkit-user-select: none;
+			user-select: none;
+		}
+
+		#maintext::after {
+			position: absolute;
+			top: 10px;
+			right: -10px;
+			animation: blink 1s steps(1) infinite;
+			background-color: #fff;
+			width: 5px;
+			content: '';
+		}
+
+		@keyframes blink {
+
+			0%,
+			100% {
+				background-color: #fff;
+			}
+
+			50% {
+				background-color: transparent;
+			}
+		}
+
+		#bottomdiv {
+			justify-content: center;
+			align-items: center;
+			margin-top: 8px;
+			border-radius: 32px;
+			background-color: rgba(0, 0, 0, 0.25);
+			height: 20%;
+			-webkit-backdrop-filter: blur(10px);
+			backdrop-filter: blur(10px);
+		}
+	</style>
+	<style>
+		/* 书签样式 */
+		.bookmark {
+			display: flex;
+			position: fixed;
+			align-items: center;
+			margin-left: 16px;
+			border-top-left-radius: 16px;
+			border-bottom-left-radius: 16px;
+			width: 144px;
+			width: calc(144px + env(safe-area-inset-right));
+			height: 128px;
+		}
+
+		.bookmark::before {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: -1;
+			border-top-left-radius: 16px;
+			border-bottom-left-radius: 16px;
+			background-color: rgba(0, 0, 0, 0.25);
+			width: 100%;
+			height: 100%;
+			content: "";
+			-webkit-backdrop-filter: blur(10px);
+			backdrop-filter: blur(10px);
+		}
+
+		.booktitle {
+			margin-left: 40px;
+			color: #fff;
+			-webkit-user-select: none;
+			user-select: none;
+		}
+
+		.bookpage {
+			display: flex;
+			position: fixed;
+			align-items: center;
+			margin-left: 100%;
+			border-top-right-radius: 16px;
+			border-bottom-right-radius: 16px;
+			background-color: rgba(0, 0, 0, 0.25);
+			width: 700px;
+			min-height: 128px;
+			-webkit-backdrop-filter: blur(10px);
+			backdrop-filter: blur(10px);
+		}
+
+		.page {
+			margin: 0px 32px;
+			color: #fff;
+		}
+	</style>
+	<style>
+		/* 书签动画 */
+		.bookmark {
+			transition-duration: 0.5s;
+		}
+
+		p,
+		a {
+			transition-duration: 0.5s;
+		}
+
+		@media (any-hover: hover) {
+			.bookmark:hover {
+				transform: translateX(-16%);
+			}
+
+			p:hover,
+			a:hover {
+				color: #eeeeee;
+			}
+		}
+	</style>
+	<style>
+		#contact {
+			margin-top: 144px;
+		}
+
+		#exlink {
+			margin-top: 288px;
+		}
+
+		#miaocraft {
+			margin-top: 432px;
+		}
+	</style>
+	<script>
+		// 初始化打字效果
+		let texts = [
+			{
+				"text": "Hello, world!",
+				"fontFamily": "m1a-Minecraft"
+			},
+			{
+				"text": "Miaocraft",
+				"fontFamily": "m1a-Cat_font"
+			},
+			{
+				"text": "Minecraft",
+				"fontFamily": "m1a-MinecraftB"
+			}
+		];
+		function initType() {
+			let maintext = document.getElementById("maintext");
+			let type2del = true;
+			let index = 0;
+			let jndex = 0;
+			maintext.style.fontFamily = texts[index].fontFamily;
+			setInterval(
+				() => {
+					if (type2del) {
+						maintext.innerHTML = texts[index].text.slice(0, ++jndex);
+					} else {
+						maintext.innerHTML = texts[index].text.slice(0, (jndex > 0 ? jndex-- : 0));
+					}
+					if (jndex == texts[index].text.length + 3) {
+						type2del = false;
+					} else if (jndex < -8) {
+						jndex = 0;
+						type2del = true;
+						if (++index == texts.length) {
+							index = 0;
+						}
+						maintext.style.fontFamily = texts[index].fontFamily;
+					} else if (jndex < 1) {
+						jndex--;
+					}
+				}, 200);
+		}
+	</script>
+	<script>
+		// 书签点击事件
+		let moveDistance = "512";
+		let openedBookmark = "none";
+		function clickBookmark(bmID) {
+			if (openedBookmark == "none") {
+				openedBookmark = bmID;
+				openBookmark(bmID);
+			} else if (openedBookmark == bmID) {
+				if (window.getSelection().toString().length > 0) {
+					return;
+				}
+				openedBookmark = "none";
+				closeBookmark(bmID);
+			} else {
+				if (window.getSelection().toString().length > 0) {
+					return;
+				}
+				closeBookmark(openedBookmark);
+				openedBookmark = bmID;
+				openBookmark(bmID);
+			}
+		}
+		function closeBookmark(bmID) {
+			let element = document.getElementById(bmID);
+			element.style.transform = "";
+			element.style.zIndex = "";
+		}
+		function openBookmark(bmID) {
+			let element = document.getElementById(bmID);
+			element.style.transform = `translateX(-${moveDistance}%)`;
+			element.style.zIndex = "10";
+		}
+	</script>
+	<script>
+		// 小数转百分比字符串
+		function num2percent(num) {
+			return (num * 100).toFixed(0) + '%';
+		}
+		// 为Hex首部填充0直到长度为2
+		function fill04hex2length2(hex) {
+			return hex.length < 2 ? `0${hex}` : hex;
+		}
+		// RGB数组转Hex
+		function rgbArray2hex(rgbArray) {
+			return `#${fill04hex2length2(rgbArray[0].toString(16))}${fill04hex2length2(rgbArray[1].toString(16))}${fill04hex2length2(rgbArray[2].toString(16))}`;
+		}
+		// Hex转RGB数组
+		function hex2rgbArray(hex) {
+			return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
+		}
+		// 计算渐变颜色
+		function caculateColor(startColor, endColor, proportion) {
+			let startColorRGB = hex2rgbArray(startColor);
+			let endColorRGB = hex2rgbArray(endColor);
+			let resultColorRGB = [];
+			for (let i = 0; i < 3; i++) {
+				resultColorRGB.push(Math.round(startColorRGB[i] + (endColorRGB[i] - startColorRGB[i]) * proportion));
+			}
+			return rgbArray2hex(resultColorRGB);
+		}
+		// 制作猫咪耳朵背景
+		function makeCarEarBackground(colorArgs, width, height, pointInCat, pointInColorFiled, pointIndex) {
+			const sqrt2 = Math.sqrt(2);
+			let earLength = Math.sqrt(width * height / 8);
+			let colorField = colorArgs.length - 1;
+			let colorFieldWidth = width / colorField;
+			let colorFieldWidthInEarProportion = colorFieldWidth / earLength / sqrt2;
+			let PointInCat = pointInCat.slice(pointIndex, pointIndex + 2);
+			let PointInColorFiled = pointInColorFiled.slice(pointIndex, pointIndex + 2);
+			let ColorStart = Math.floor(PointInCat[0] * colorField);
+			let ColorEnd = Math.ceil(PointInCat[1] * colorField);
+			let Color = colorArgs.slice(ColorStart, ColorEnd + 1);
+			Color[0] = caculateColor(Color[0], Color[1], PointInColorFiled[0]);
+			Color[Color.length - 1] = caculateColor(Color[Color.length - 2], Color[Color.length - 1], PointInColorFiled[1]);
+			let Point = [];
+			Point.push(0);
+			if (Color.length > 2) Point.push((1 - PointInColorFiled[0]) * colorFieldWidth / earLength / sqrt2);
+			for (let i = 2; i < Color.length - 1; i++) {
+				Point.push(Point[i - 1] + colorFieldWidthInEarProportion);
+			}
+			Point.push(1);
+			let ColorArgs = [];
+			for (let i = 0; i < Color.length; i++) {
+				ColorArgs.push(`${Color[i]} ${num2percent(Point[i])}`);
+			}
+			return ColorArgs;
+		}
+		// 制作猫咪元素背景
+		function makeCatBackground(isLinearGradient = false, colorArgs = ["#ec9bad"], angle = 0, width, height) {
+			let background = {
+				cat: colorArgs[0],
+				catLeftEar: colorArgs[0],
+				catRightEar: colorArgs[0]
+			};
+			if (isLinearGradient) {
+				const sqrt2 = Math.sqrt(2);
+				let earLength = Math.sqrt(width * height / 8);
+				let colorField = colorArgs.length - 1;
+				let colorFieldWidth = width / colorField;
+				let colorFieldWidthInEarProportion = colorFieldWidth / earLength / sqrt2;
+				let pointInCat = [];
+				pointInCat.push(0.125 - (sqrt2 - 1) * earLength / 2 / width);
+				pointInCat.push(pointInCat[0] + earLength * sqrt2 / width);
+				pointInCat.push(1 - pointInCat[1]);
+				pointInCat.push(1 - pointInCat[0]);
+				let pointInColorFiled = [];
+				pointInCat.forEach(ele => {
+					pointInColorFiled.push((colorField * ele) % 1);
+				});
+				let leftColorArgs = makeCarEarBackground(colorArgs, width, height, pointInCat, pointInColorFiled, 0);
+				let rightColorArgs = makeCarEarBackground(colorArgs, width, height, pointInCat, pointInColorFiled, 2);
+				background.cat = `linear-gradient(${angle}deg, ${colorArgs.join(", ")})`;
+				background.catLeftEar = `linear-gradient(${angle - 45}deg, ${leftColorArgs.join(", ")})`;
+				background.catRightEar = `linear-gradient(${angle - 45}deg, ${rightColorArgs.join(", ")})`;
+			}
+			return background;
+		}
+		// 制作猫咪元素
+		function makeCat(background = {
+			cat: "#ec9bad",
+			catLeftEar: "#ec9bad",
+			catRightEar: "#ec9bad"
+		}, width = 256, height = 128) {
+			let earLength = Math.sqrt(width * height / 8);
+			let eleCat = document.createElement("div");
+			let eleCatLeftEar = document.createElement("div");
+			let eleCatRightEar = document.createElement("div");
+			let eleEar = [eleCatLeftEar, eleCatRightEar];
+			eleCat.style.position = "absolute";
+			eleCat.style.borderRadius = `${width * height / 4096}px`;
+			eleCat.style.background = background.cat;
+			eleCat.style.width = `${width}px`;
+			eleCat.style.height = `${height}px`;
+			eleEar.forEach(ele => {
+				ele.style.position = "absolute";
+				ele.style.transform = "rotate(45deg)";
+				ele.style.top = `-${earLength / 2 - earLength / 16}px`;
+				ele.style.borderRadius = `${earLength / 8}px`;
+				ele.style.width = `${earLength}px`;
+				ele.style.height = `${earLength}px`;
+				eleCat.appendChild(ele);
+			})
+			eleCatLeftEar.style.left = `${width / 8}px`;
+			eleCatLeftEar.style.background = background.catLeftEar;
+			eleCatLeftEar.style.zIndex = -1;
+			eleCatRightEar.style.right = `${width / 8}px`;
+			eleCatRightEar.style.background = background.catRightEar;
+			eleCatRightEar.style.zIndex = -1;
+			eleCat.style.animationIterationCount = "infinite";
+			eleCat.style.animationDuration = "10s";
+			eleCat.style.animationDelay = `${Math.random() * 3}s`;
+			return eleCat;
+		}
+		// 制作游动动画效果
+		function makeFlowAnimate(index, transform) {
+			let start = `transform: translate(0, 0) ${transform};`;
+			let zero = `transform: translate(${(Math.random() - 0.5) * 5}%, ${(Math.random() - 0.5) * 10}%) ${transform};`;
+			let one = `transform: translate(${(Math.random() - 0.5) * 5}%, ${(Math.random() - 0.5) * 10}%) ${transform};`;
+			document.styleSheets[0].insertRule(`@keyframes flow${index} { 0% { ${start} } 25% { ${zero} } 50% { ${one} } 75% { ${zero} } 100% { ${start} }`, 0);
+			return `flow${index}`;
+		}
+		// 初始化背景
+		function initBackground(isLinearGradient = false, colorArgs = ["#ec9bad"]) {
+			for (let i = 0; i < 4; i++) {
+				let eleCat = makeCat(makeCatBackground(isLinearGradient, colorArgs, 90, 256, 128), 256, 128);
+				eleCat.style.top = `${Math.random() * 100 - 10}vh`;
+				eleCat.style.left = `${Math.random() * 20 + i * 25}vw`;
+				let transform = `scale(${Math.random() * 0.8 + 0.4}) rotate(${Math.random() * 360}deg)`;
+				eleCat.style.transform = transform;
+				eleCat.style.animationName = makeFlowAnimate(i, transform);
+				document.body.prepend(eleCat);
+			}
+		}
+	</script>
+	<script>
+		window.onload = () => {
+			initType();
+			initBackground(true, ["#ec9bad", "#ffffff"]);
+		}
+	</script>
 </head>
+
 <body>
-    <div id="container">
-        <div id="mainpage">
-            <span id="maintext"></span>
-        </div>
-        <div id="navblank">
-            <div id="play" class="bookmark" onclick="clickBookmark('play')">
-                <h2 class="booktitle">加入<br>游戏</h2>
-                <div class="bookpage">
-                    <p id="playpage" class="page">
-                        mc.miaocraft.party
-                    </p>
-                </div>
-            </div>
-            <div id="status" class="bookmark" onclick="clickBookmark('status')">
-                <h2 class="booktitle">服务器<br>状态</h2>
-                <div class="bookpage">
-                    <p id="statuspage" class="page">
-                        [MinecraftBE] 暂停运行<br>
-                        [MinecraftJava] 1.19.2-Forge_43.3.13
-                    </p>
-                </div>
-            </div>
-            <div id="description" class="bookmark" onclick="clickBookmark('description')">
-                <h2 class="booktitle">服务器<br>须知</h2>
-                <div class="bookpage">
-                    <p id="descriptionpage" class="page">
-(2024.5.26)<br>
-[MinecraftBE]暂停运行, 敬请期待!<br>
-[MinecraftJava1.19.2-mod]<br>
-各位星塘风语服务器成员:<br>
-中午好, 酥喵MinecraftJava服务器已开启, 需要的可通过以上所示的ip和端口进入, 服务器为群员无偿提供, 请不要通过ip攻击服务器.<br>
-*1.需要向管理员提供玩家ID等必要信息, 否则无法进入服务器.<br>
-*2.服务器无法连接时可向 @随风风 进行报备<br>
-(管理员大多因学业或工作繁忙, 所以直接留言相应内容即可, 回复时间为周末/节假日的下午6点至晚上12点).<br>
-*3.擅自访问外网可能产生诸多高度敏感问题. 因此根据相关规定要求, 我们不会提供访问外网的便利和帮助.<br>
-*4.服务器最终解释权归酥喵所有.<br>
-                    </p>
-                </div>
-            </div>
-            <div id="notice" class="bookmark" onclick="clickBookmark('notice')">
-                <h2 class="booktitle">公告</h2>
-                <div class="bookpage">
-                    <p id="noticepage" class="page">
-(2024.5.26)<br>
-各位星塘风语服务器成员:<br>
-欢迎进入星塘风语服务器, 为了维护服务器的和谐与稳定, 还请大家遵守以下几点.<br>
-游戏/服务器中禁止:<br>
-1. 使用外挂或窃取玩家物品,恶意破坏服务器存档等行为.<br>
-2. 建造高频红石电路或设施, (因为这可能会造成服务器卡顿并影响其他玩家体验.)<br>
-3. 发送任何有关涉政,暴恐,血腥,色情,争议性等信息.<br>
-4. 无故刷屏, 发送意义不明消息, 影响正常的话题交流.<br>
-5. 造谣,侮辱,诽谤,煽动对立和仇恨.<br>
-*1. 如有修改将会在公告发布, 继续在服务器中游玩即表明你同意并遵守以上所有规定.<br>
-*2. 特别提醒: 一旦您退出群聊, 无论主动还是被动, 服务器白名单权限也将同时移除.<br>
-*3. 最终解释权归酥喵所有.<br>
-Harehane
-                    </p>
-                </div>
-            </div>
-            <div id="about" class="bookmark" onclick="clickBookmark('about')">
-                <h2 class="booktitle">关于</h2>
-                <div class="bookpage">
-                    <p id="aboutpage" class="page">
-                        <a style="font-size: 32px;">愿时间给你, 你想要的答案~<br></a>
-                        <a style="font-size: 16px;">M1a0w0</a>
-                    </p>
-                </div>
-            </div>
-            <!-- <div id="example" class="bookmark" onclick="clickBookmark('example')">
-                <h2 class="booktitle">example</h2>
-                <div class="examplepage">
-                    <p id="statuspage" class="page">
-                    </p>
-                </div>
-            </div> -->
-        </div>
-    </div>
+	<div id="container">
+		<div id="mainpage">
+			<span id="maintext"></span>
+		</div>
+		<div id="bottomdiv">
+			<a style="color: #fff;" href="https://github.com/M1a0w0">
+				Github: https://github.com/M1a0w0
+			</a>
+		</div>
+		<div id="bmblank">
+			<div id="aboutme" class="bookmark" onclick="clickBookmark('aboutme')">
+				<h2 class="booktitle">关于<br />个人</h2>
+				<div class="bookpage">
+					<p id="aboutmepage" class="page" style="font-size: 32px;">
+						喵鱼: Minecraft玩家, 一名普通开发者
+					</p>
+				</div>
+			</div>
+			<div id="contact" class="bookmark" onclick="clickBookmark('contact')">
+				<h2 class="booktitle">联系<br />方式</h2>
+				<div class="bookpage">
+					<a id="contactpage" class="page" style="font-size: 32px;" href="mailto:m1a0w0@miaocraft.dev">
+						电子邮件: m1a0w0@miaocraft.dev
+					</a>
+				</div>
+			</div>
+			<div id="exlink" class="bookmark" onclick="clickBookmark('exlink')">
+				<h2 class="booktitle">外部<br />链接</h2>
+				<div class="bookpage">
+					<a id="exlinkpage" class="page" style="font-size: 32px;" href="https://github.com/M1a0w0">
+						Github: https://github.com/M1a0w0
+					</a>
+				</div>
+			</div>
+			<div id="miaocraft" class="bookmark" onclick="clickBookmark('miaocraft')">
+				<h2 class="booktitle">喵块</h2>
+				<div class="bookpage">
+					<p id="miaocraftpage" class="page">
+						<a style="font-size: 32px;">愿时间给你, 你想要的答案~<br /></a>
+						<a style="font-size: 16px;">M1a0w0</a>
+					</p>
+				</div>
+			</div>
+			<!-- <div id="example" class="bookmark" onclick="clickBookmark('example')">
+				<h2 class="booktitle">example</h2>
+				<div class="bookpage">
+					<p id="examplepage" class="page">
+					</p>
+				</div>
+			</div> -->
+		</div>
+	</div>
 </body>
+
 </html>
